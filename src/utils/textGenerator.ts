@@ -1,3 +1,4 @@
+import type { CharState } from '../types'
 import { ODS_SNIPPETS, type OdsSnippet } from '../data/odsTexts'
 
 function pickRandom<T>(items: T[]): T {
@@ -25,9 +26,9 @@ export function appendRandomText(
   return { text: currentText + snippet.text + ' ', snippet }
 }
 
-export function initCharStates(text: string) {
+export function initCharStates(text: string): CharState[] {
   return text.split('').map((char) => ({
     char,
-    status: 'pending' as const,
+    status: 'pending',
   }))
 }

@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { applyBackspace, applyCharacter } from './typingEngine'
+import {
+  applyBackspace,
+  applyCharacter,
+  type TypingEngineState,
+} from './typingEngine'
 import { initCharStates } from '../utils/textGenerator'
 
-function engineState(text: string) {
+function engineState(text: string): TypingEngineState {
   return {
     chars: initCharStates(text),
     cursorIndex: 0,
@@ -10,7 +14,7 @@ function engineState(text: string) {
   }
 }
 
-function typeString(state: ReturnType<typeof engineState>, input: string) {
+function typeString(state: TypingEngineState, input: string): TypingEngineState {
   let current = state
   for (const ch of input) {
     const result = applyCharacter(current, ch)
