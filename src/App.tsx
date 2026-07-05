@@ -4,7 +4,9 @@ import { useRouter } from './context/RouterContext'
 import { LoginPage } from './pages/LoginPage'
 import { MainMenuPage } from './pages/MainMenuPage'
 import { ProfilePage } from './pages/ProfilePage'
-import { GamePage } from './pages/GamePage'
+
+import { LevelModePage } from './pages/LevelModePage'
+import { InfiniteModePage } from './pages/InfiniteModePage'
 
 function AppRoutes() {
   const { user, loading } = useAuth()
@@ -33,8 +35,9 @@ function AppRoutes() {
     case 'profile':
       return <ProfilePage />
     case 'game-levels':
+      return <LevelModePage />
     case 'game-infinite':
-      return <GamePage />
+      return <InfiniteModePage />
     default:
       return <MainMenuPage />
   }
