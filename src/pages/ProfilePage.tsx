@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useRouter } from '../context/RouterContext'
 import { db } from '../lib/firebase'
 import { loadUserData } from '../storage/userStore'
+import { CertificateGenerator } from '../components/CertificateGenerator'
 
 interface FirestoreProfile {
     maxLevel: number
@@ -176,6 +177,26 @@ export function ProfilePage() {
                         Inicia sesión con Google para sincronizar tu nivel y récord en la nube.
                     </p>
                 )}
+
+                {/* Certificate section */}
+                <div className="rounded-2xl border border-black/8 bg-surface p-5 dark:border-white/8 dark:bg-surface-dark">
+                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted">
+                        Diploma Oficial
+                    </h3>
+                    <p className="mb-4 text-xs text-muted">
+                        Genera un certificado verificable con código QR que demuestra tu nivel de mecanografía.
+                        El diploma se descarga como imagen PNG.
+                    </p>
+                    <CertificateGenerator
+                        certData={{
+                            uid: user?.uid ?? 'guest',
+                            displayName,
+                            wpm: remote?.wpmRecord ?? bestWpmOverall,
+                            level: remote?.maxLevel ?? 0,
+                        }}
+                        canSave={!!user}
+                    />
+                </div>
             </main>
         </div>
     )
