@@ -14,7 +14,7 @@ export function getRandomSnippet(excludeGoal?: number): OdsSnippet {
 }
 
 export function buildInitialText(): { text: string; snippet: OdsSnippet } {
-  const snippet = getRandomSnippet()
+  const snippet = getRandomSnippet() //ODS_SNIPPETS[0]
   return { text: snippet.text + ' ', snippet }
 }
 

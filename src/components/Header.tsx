@@ -1,13 +1,14 @@
 import { ThemeToggle } from './ThemeToggle'
 import type { Theme } from '../types'
 
-type PanelView = 'profile' | 'stats' | 'settings' | null
+export type PanelView = 'profile' | 'stats' | 'settings' | null
 
 interface HeaderProps {
   theme: Theme
   onToggleTheme: () => void
   displayName: string
   onOpenPanel: (panel: NonNullable<PanelView>) => void
+  onBackToMenu?: () => void
 }
 
 function NavButton({
@@ -36,16 +37,31 @@ export function Header({
   onToggleTheme,
   displayName,
   onOpenPanel,
+  onBackToMenu,
 }: HeaderProps) {
   return (
     <header className="flex items-center justify-between gap-2 px-4 py-6 sm:px-8">
-      <div className="min-w-0 text-left">
-        <h1 className="truncate text-xl font-semibold tracking-tight text-text dark:text-accent-dark sm:text-2xl">
-          ODS <span className="text-accent dark:text-accent-dark">Typing</span>
-        </h1>
-        <p className="mt-0.5 truncate text-xs text-muted sm:text-sm">
-          Hola, {displayName}
-        </p>
+      <div className="flex min-w-0 items-center gap-2">
+        {onBackToMenu && (
+          <button
+            type="button"
+            onClick={onBackToMenu}
+            aria-label="Volver al menú"
+            className="shrink-0 rounded-lg p-1.5 text-muted transition-colors duration-200 hover:bg-black/5 hover:text-text dark:hover:bg-white/10 dark:hover:text-text-dark"
+          >
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+        <div className="min-w-0 text-left">
+          <h1 className="truncate text-xl font-semibold tracking-tight text-text dark:text-accent-dark sm:text-2xl">
+            ODS <span className="text-accent dark:text-accent-dark">Typing</span>
+          </h1>
+          <p className="mt-0.5 truncate text-xs text-muted sm:text-sm">
+            Hola, {displayName}
+          </p>
+        </div>
       </div>
 
       <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
