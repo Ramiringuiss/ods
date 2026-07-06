@@ -6,6 +6,7 @@ import { MainMenuPage } from './pages/MainMenuPage'
 import { ProfilePage } from './pages/ProfilePage'
 
 import { LevelModePage } from './pages/LevelModePage'
+import { LevelSelectPage } from './pages/LevelSelectPage'
 import { InfiniteModePage } from './pages/InfiniteModePage'
 
 function AppRoutes() {
@@ -34,6 +35,8 @@ function AppRoutes() {
       return <MainMenuPage />
     case 'profile':
       return <ProfilePage />
+    case 'level-select':
+      return <LevelSelectPage />
     case 'game-levels':
       return <LevelModePage />
     case 'game-infinite':

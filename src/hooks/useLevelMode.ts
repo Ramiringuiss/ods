@@ -17,6 +17,8 @@ import { calculateAccuracy, calculateWpm } from '../utils/typingMetrics'
 import { ODS_SNIPPETS } from '../data/odsTexts'
 import { LEVELS, TOTAL_LEVELS } from '../data/levels'
 import { playSound } from '../utils/sounds'
+import { charToKeyId } from '../data/keyboardLayout'
+import { getHistoryStats, loadUserData } from '../storage/userStore'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -27,6 +29,7 @@ export interface LevelResult {
     wpm: number
     accuracy: number
     timeUsed: number
+    errors: number
 }
 
 // ─── Engine reducer (same pattern as useTypingTest) ──────────────────────────
@@ -48,14 +51,14 @@ function buildCharsForLevel(levelIndex: number): CharState[] {
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
-export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
-    const [levelIndex, setLevelIndex] = useState(0) // 0-based
+export function useLevelMode(onGameEnd: (results: LevelResult[]) => void, startIndex = 0) {
+    const [levelIndex, setLevelIndex] = useState(startIndex) // 0-based
     const [levelState, setLevelState] = useState<LevelState>('idle')
-    const [timeLeft, setTimeLeft] = useState<number>(LEVELS[0]!.timerSeconds)
+    const [timeLeft, setTimeLeft] = useState<number>(LEVELS[startIndex]!.timerSeconds)
     const [levelResults, setLevelResults] = useState<LevelResult[]>([])
 
     const [engine, dispatchEngine] = useReducer(engineReducer, {
-        chars: buildCharsForLevel(0),
+        chars: buildCharsForLevel(startIndex),
         cursorIndex: 0,
         errors: 0,
     })
@@ -63,6 +66,8 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
     const startTimeRef = useRef<number | null>(null)
     const levelStateRef = useRef<LevelState>('idle')
     const inputRef = useRef<HTMLInputElement>(null)
+    const sessionKeyErrorsRef = useRef<Record<string, number>>({})
+    const [sessionKeyErrors, setSessionKeyErrors] = useState<Record<string, number>>({})
 
     const currentLevel = LEVELS[levelIndex]!
     const snippet = ODS_SNIPPETS[currentLevel.snippetIndex]!
@@ -95,7 +100,16 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
         return () => clearInterval(interval)
     }, [levelState, currentLevel.timerSeconds])
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // ── Record a key error ─────────────────────────────────────────────────────
+    const recordKeyError = useCallback((char: string, physicalKey: string) => {
+        const keyId = charToKeyId(char, physicalKey)
+        const current = sessionKeyErrorsRef.current
+        current[keyId] = (current[keyId] ?? 0) + 1
+        sessionKeyErrorsRef.current = current
+        setSessionKeyErrors({ ...current })
+    }, [])
+
+    // ── Build result ───────────────────────────────────────────────────────────
 
     const buildResult = useCallback((): LevelResult => {
         const elapsed = startTimeRef.current ? Date.now() - startTimeRef.current : 1
@@ -105,8 +119,9 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
             wpm: calculateWpm(correctChars, elapsed),
             accuracy: calculateAccuracy(correctChars, engine.cursorIndex),
             timeUsed: elapsed / 1000,
+            errors: engine.errors,
         }
-    }, [engine.chars, engine.cursorIndex, currentLevel.level])
+    }, [engine.chars, engine.cursorIndex, engine.errors, currentLevel.level])
 
     // ── Pass level ─────────────────────────────────────────────────────────────
     const passLevel = useCallback(() => {
@@ -134,6 +149,9 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
         setLevelState('idle')
         levelStateRef.current = 'idle'
         startTimeRef.current = null
+        // Reset per-level error tracking
+        sessionKeyErrorsRef.current = {}
+        setSessionKeyErrors({})
         setTimeout(() => inputRef.current?.focus(), 50)
     }, [levelIndex])
 
@@ -144,6 +162,9 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
         setLevelState('idle')
         levelStateRef.current = 'idle'
         startTimeRef.current = null
+        // Reset per-level error tracking
+        sessionKeyErrorsRef.current = {}
+        setSessionKeyErrors({})
         setTimeout(() => inputRef.current?.focus(), 50)
     }, [levelIndex, currentLevel.timerSeconds])
 
@@ -157,7 +178,7 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
     }, [])
 
     const typeChar = useCallback(
-        (inputChar: string) => {
+        (inputChar: string, physicalKey?: string) => {
             if (levelStateRef.current !== 'idle' && levelStateRef.current !== 'active') return
             startIfNeeded()
 
@@ -171,8 +192,12 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
                 passLevel()
             }
 
-            if (!result.isCorrect) playSound('error', true)
-            else playSound('key', true)
+            if (!result.isCorrect) {
+                recordKeyError(inputChar, physicalKey ?? inputChar)
+                playSound('error', true)
+            } else {
+                playSound('key', true)
+            }
         },
         [engine, startIfNeeded, passLevel],
     )
@@ -191,13 +216,13 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
 
             if (e.key === ' ' || e.code === 'Space') {
                 e.preventDefault()
-                typeChar(' ')
+                typeChar(' ', 'Space')
                 return
             }
 
             if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
                 e.preventDefault()
-                typeChar(e.key)
+                typeChar(e.key, e.code || e.key)
             }
         },
         [engine, typeChar],
@@ -228,6 +253,10 @@ export function useLevelMode(onGameEnd: (results: LevelResult[]) => void) {
         chars: engine.chars,
         cursorIndex: engine.cursorIndex,
         errors: engine.errors,
+        // Key error heatmap
+        sessionKeyErrors,
+        // History stats helper
+        historyStats: getHistoryStats(loadUserData()),
         // Live stats
         liveWpm,
         liveAccuracy,

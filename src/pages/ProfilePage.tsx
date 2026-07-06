@@ -8,6 +8,7 @@ import { CertificateGenerator } from '../components/CertificateGenerator'
 
 interface FirestoreProfile {
     maxLevel: number
+    maxLevelUnlocked: number
     wpmRecord: number
     updatedAt: string
 }
@@ -30,6 +31,7 @@ export function ProfilePage() {
                     // Initialize Firestore doc for new users
                     const init: FirestoreProfile = {
                         maxLevel: 0,
+                        maxLevelUnlocked: 1,
                         wpmRecord: localData.progress.bestWpm['30'] ?? 0,
                         updatedAt: new Date().toISOString(),
                     }
@@ -60,6 +62,11 @@ export function ProfilePage() {
         {
             label: 'Nivel máx.',
             value: loadingRemote ? '…' : (remote?.maxLevel ?? 0),
+            sub: 'firestore',
+        },
+        {
+            label: 'ODS desbloq.',
+            value: loadingRemote ? '…' : `${remote?.maxLevelUnlocked ?? 1}/17`,
             sub: 'firestore',
         },
         { label: 'Sesiones', value: localData.progress.sessionsCompleted, sub: 'local' },
@@ -187,15 +194,32 @@ export function ProfilePage() {
                         Genera un certificado verificable con código QR que demuestra tu nivel de mecanografía.
                         El diploma se descarga como imagen PNG.
                     </p>
-                    <CertificateGenerator
-                        certData={{
-                            uid: user?.uid ?? 'guest',
-                            displayName,
-                            wpm: remote?.wpmRecord ?? bestWpmOverall,
-                            level: remote?.maxLevel ?? 0,
-                        }}
-                        canSave={!!user}
-                    />
+
+                    {/* Lock logic based on maxLevelUnlocked */}
+                    {!loadingRemote && (remote?.maxLevelUnlocked ?? 1) < 17 ? (
+                        <div className="flex flex-col items-center gap-3">
+                            <button
+                                type="button"
+                                disabled
+                                className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-black/10 px-4 py-3 text-sm font-semibold text-muted dark:bg-white/10"
+                            >
+                                🔒 Bloqueado: Completa los 17 ODS
+                            </button>
+                            <p className="text-xs text-muted">
+                                Progreso: {Math.max(0, (remote?.maxLevelUnlocked ?? 1) - 1)}/17 ODS completados
+                            </p>
+                        </div>
+                    ) : (
+                        <CertificateGenerator
+                            certData={{
+                                uid: user?.uid ?? 'guest',
+                                displayName,
+                                wpm: remote?.wpmRecord ?? bestWpmOverall,
+                                level: remote?.maxLevel ?? 0,
+                            }}
+                            canSave={!!user}
+                        />
+                    )}
                 </div>
             </main>
         </div>

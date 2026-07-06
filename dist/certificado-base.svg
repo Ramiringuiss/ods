@@ -1,0 +1,48 @@
+<svg width="1123" height="794" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo Blanco Puro (Ahorro de tinta) -->
+  <rect width="100%" height="100%" fill="#FFFFFF"/>
+  
+  <!-- Borde Exterior Oscuro (Toque elegante) -->
+  <rect x="40" y="40" width="1043" height="714" fill="none" stroke="#2D3748" stroke-width="6" rx="15"/>
+  
+  <!-- Borde Interior Verde ODS -->
+  <rect x="50" y="50" width="1023" height="694" fill="none" stroke="#38B2AC" stroke-width="2" rx="10"/>
+  
+  <!-- Adornos en las esquinas -->
+  <path d="M 40 100 L 40 40 L 100 40" fill="none" stroke="#D97706" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M 1083 100 L 1083 40 L 1023 40" fill="none" stroke="#D97706" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M 40 694 L 40 754 L 100 754" fill="none" stroke="#D97706" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M 1083 694 L 1083 754 L 1023 754" fill="none" stroke="#D97706" stroke-width="8" stroke-linejoin="round"/>
+
+  <!-- Título Principal -->
+  <text x="561" y="150" font-family="Arial, sans-serif" font-size="28" fill="#38B2AC" font-weight="bold" text-anchor="middle" letter-spacing="4">ODS TYPING</text>
+  <text x="561" y="230" font-family="Arial, sans-serif" font-size="55" fill="#1A202C" font-weight="900" text-anchor="middle" letter-spacing="1">CERTIFICADO DE LOGRO</text>
+  <line x1="361" y1="260" x2="761" y2="260" stroke="#E2E8F0" stroke-width="2"/>
+  
+  <!-- Texto Introductorio -->
+  <text x="561" y="320" font-family="Arial, sans-serif" font-size="22" fill="#4A5568" text-anchor="middle">El presente documento reconoce el esfuerzo y dedicación de:</text>
+  
+  <!-- ========================================== -->
+  <!-- EL CANVAS DIBUJARÁ EL NOMBRE AQUÍ (Y: 420) -->
+  <!-- ========================================== -->
+
+  <!-- Texto Secundario -->
+  <text x="561" y="500" font-family="Arial, sans-serif" font-size="18" fill="#4A5568" text-anchor="middle">Por su destacado desempeño en mecanografía y su compromiso con el aprendizaje de los</text>
+  <text x="561" y="530" font-family="Arial, sans-serif" font-size="18" fill="#4A5568" text-anchor="middle">Objetivos de Desarrollo Sostenible de la ONU, logrando la marca de:</text>
+
+  <!-- ============================================ -->
+  <!-- EL CANVAS DIBUJARÁ EL WPM/NIVEL AQUÍ (Y: 600) -->
+  <!-- ============================================ -->
+
+  <!-- Sección de Firmas / Fecha (Izquierda) -->
+  <line x1="150" y1="670" x2="400" y2="670" stroke="#2D3748" stroke-width="2"/>
+  <text x="275" y="700" font-family="Arial, sans-serif" font-size="16" fill="#4A5568" text-anchor="middle">Fecha de Expedición</text>
+  
+  <!-- ========================================== -->
+  <!-- EL CANVAS DIBUJARÁ LA FECHA AQUÍ (Y: 660)  -->
+  <!-- ========================================== -->
+
+  <!-- Caja guía para el Código QR (Derecha) -->
+  <rect x="800" y="580" width="130" height="130" fill="none" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="865" y="735" font-family="Arial, sans-serif" font-size="12" fill="#A0AEC0" text-anchor="middle">Verificar autenticidad</text>
+</svg>

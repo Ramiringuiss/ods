@@ -13,7 +13,7 @@ export function MainMenuPage() {
 
     const menuItems = [
         {
-            id: 'game-levels' as const,
+            id: 'level-select' as const,
             emoji: '🏆',
             title: 'Modo Niveles',
             description: 'Supera niveles con dificultad progresiva',
