@@ -64,7 +64,7 @@ function LevelResultsPanel({
                     id="level-results-title"
                     className="text-center text-lg font-semibold text-text dark:text-text-dark"
                 >
-                    {isGameComplete ? '🏆 ¡Todos los ODS completados!' : `✅ Nivel ${result.level} superado`}
+                    {isGameComplete ? '¡Todos los ODS completados!' : `Nivel ${result.level} superado`}
                 </h2>
 
                 {/* Main stats */}

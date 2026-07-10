@@ -52,6 +52,15 @@ export function MainMenuPage() {
                     </h1>
                 </div>
                 <div className="flex items-center gap-2">
+                    <a
+                        href="https://drive.google.com/file/d/1kFfggA-CEJn4dcv3G3B9ymVz_WsVanE3/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Informe del Proyecto"
+                        className="rounded-lg px-3 py-1.5 text-xs text-muted transition-colors hover:bg-black/5 hover:text-text dark:hover:bg-white/10 dark:hover:text-text-dark"
+                    >
+                        📄 Informe
+                    </a>
                     <ThemeToggle theme={theme} onToggle={toggleTheme} />
                     {user && (
                         <button

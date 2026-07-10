@@ -109,6 +109,15 @@ export function LoginPage() {
                     </button>
                 </div>
 
+                <a
+                    href="https://drive.google.com/file/d/1kFfggA-CEJn4dcv3G3B9ymVz_WsVanE3/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs text-muted transition-colors duration-200 hover:text-text dark:hover:text-text-dark"
+                >
+                    📄 Informe del Proyecto
+                </a>
+
                 <p className="text-center text-[10px] text-muted">
                     Tus datos de sesión se guardan de forma segura con Firebase
                 </p>
