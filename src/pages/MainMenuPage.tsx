@@ -53,7 +53,7 @@ export function MainMenuPage() {
                 </div>
                 <div className="flex items-center gap-2">
                     <a
-                        href="https://drive.google.com/file/d/1kFfggA-CEJn4dcv3G3B9ymVz_WsVanE3/view?usp=sharing"
+                        href="https://drive.google.com/file/d/1pbYuk5wsFv2zPB-ySNZ4t8FPgnZNC4Vc/view?usp=sharing"
                         target="_blank"
                         rel="noopener noreferrer"
                         title="Informe del Proyecto"

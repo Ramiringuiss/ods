@@ -110,7 +110,7 @@ export function LoginPage() {
                 </div>
 
                 <a
-                    href="https://drive.google.com/file/d/1kFfggA-CEJn4dcv3G3B9ymVz_WsVanE3/view?usp=sharing"
+                    href="https://drive.google.com/file/d/1pbYuk5wsFv2zPB-ySNZ4t8FPgnZNC4Vc/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs text-muted transition-colors duration-200 hover:text-text dark:hover:text-text-dark"
